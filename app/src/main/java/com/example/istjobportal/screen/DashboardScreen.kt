@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -64,26 +68,19 @@ fun DashboardScreen(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Navigation options
-                    TextButton(text = "Home", onClick = {
-                        scope.launch {
-                            drawerState.close()
-                        }
+                    // Navigation options with icons
+                    DrawerMenuItem(text = "Home", icon = Icons.Filled.Home) {
+                        scope.launch { drawerState.close() }
                         navController.navigate(Screens.MainScreen.route)
-                    })
-                    TextButton(text = "Profile", onClick = {
-                        scope.launch {
-                            drawerState.close()
-                        }
-                        // Add navigation logic for Profile screen
+                    }
+                    DrawerMenuItem(text = "Profile", icon = Icons.Filled.Person) {
+                        scope.launch { drawerState.close() }
                         navController.navigate(Screens.ProfileScreen.route)
-                    })
-                    TextButton(text = "Settings", onClick = {
-                        scope.launch {
-                            drawerState.close()
-                        }
+                    }
+                    DrawerMenuItem(text = "Settings", icon = Icons.Filled.Settings) {
+                        scope.launch { drawerState.close() }
                         // Add navigation logic for Settings screen
-                    })
+                    }
                 }
             }
         },
@@ -140,13 +137,30 @@ fun DashboardScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(30.dp))
 
                     // Navigate back to main screen
-                    Button(onClick = { navController.navigate(Screens.MainScreen.route) }) {
+                    Button(
+                        onClick = { navController.navigate(Screens.MainScreen.route) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Text(text = "Go Back")
                     }
                 }
             }
         }
     )
+}
+
+@Composable
+fun DrawerMenuItem(text: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+    ) {
+        Icon(icon, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
+        Text(text = text)
+    }
 }
 
 @Composable
@@ -172,15 +186,5 @@ fun DashboardCard(title: String, content: String) {
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-    }
-}
-
-@Composable
-fun TextButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Text(text = text)
     }
 }
